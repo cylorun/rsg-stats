@@ -25,19 +25,23 @@ def make_stats():
                 if timeline.get("name") == 'enter_nether':
                     enters += 1
                     enter_times.append(timeline.get("igt", 0) / 1000)
+
                 if timeline.get("name") == 'enter_bastion':
                     bastions += 1
                     bastion_times.append(timeline.get("igt", 0) / 1000)
+
                 if timeline.get("name") == 'enter_fortress':
                     forts += 1
                     fort_times.append(timeline.get("igt", 0) / 1000)
+
                 if timeline.get("name") == 'nether_travel':
                     blinds += 1
                     blind_times.append(timeline.get("igt", 0) / 1000)
+
                 if timeline.get("name") == 'enter_stronghold':
                     strongholds += 1
                     stronghold_times.append(timeline.get("igt", 0) / 1000)
-                # os.remove(record)
+                os.remove(record)
                 
         with open(f'{os.getcwd()}\\stats.txt', 'w+') as stat_file:
             stats = ''
@@ -56,16 +60,17 @@ def make_stats():
                         case 'stronghold-count': stats+= f'STRONGHOLDS: {strongholds}\n'
                         case 'stronghold-time': stats+= f'AVG STRONGHOLD: {avg_time(stronghold_times)}\n'
             stat_file.write(stats)
+
         time.sleep(10)
 def delete_all_records():
-    print(str(*[os.remove(json_file) for json_file in glob.glob(f'{records_path}/*.json')]).replace('None',''),'Deleting records')
+    [os.remove(json_file) for json_file in glob.glob(f'{records_path}/*.json')]
 
 
 
 def avg_time(times):
     min, sec = divmod(int(sum(times) // len(times) if times else 0), 60)
     return f'{min}:{sec:02}'
-    
+
 def load_settings():
     try:
         with open('config.json', "r") as json_file:

@@ -41,8 +41,13 @@ def make_stats():
                 if timeline.get("name") == 'enter_stronghold':
                     strongholds += 1
                     stronghold_times.append(timeline.get("igt", 0) / 1000)
-                os.remove(record)
-                
+                try:
+                    os.remove(record)
+                    records.remove(record)
+                except Exception as e:
+                    print('deletion error',e)
+                    pass    
+
         with open(f'{os.getcwd()}\\stats.txt', 'w+') as stat_file:
             stats = ''
             for key, value in settings.items():
@@ -52,13 +57,13 @@ def make_stats():
                         case 'enter-avg': stats+= f'AVG ENTER: {avg_time(enter_times)}\n'
                         case 'enter-count': stats+= f'ENTERS: {enters}\n'
                         case 'bastion-count': stats+= f'BASTIONS: {bastions}\n'
-                        case 'bastion-time': stats+= f'BATSION ENTER: {avg_time(bastion_times)}\n'
+                        case 'bastion-time': stats+= f'BASTION AVG: {avg_time(bastion_times)}\n'
                         case 'fort-count': stats+= f'FORTS: {forts}\n'
-                        case 'fort-time': stats+= f'FORT ENTER: {avg_time(fort_times)}\n'
+                        case 'fort-time': stats+= f'FORT AVG: {avg_time(fort_times)}\n'
                         case 'blind-count': stats+= f'BLINDS: {blinds}\n'
-                        case 'blind-time': stats+= f'AVG BLIND: {avg_time(blind_times)}\n'
+                        case 'blind-time': stats+= f'BLIND AVG: {avg_time(blind_times)}\n'
                         case 'stronghold-count': stats+= f'STRONGHOLDS: {strongholds}\n'
-                        case 'stronghold-time': stats+= f'AVG STRONGHOLD: {avg_time(stronghold_times)}\n'
+                        case 'stronghold-time': stats+= f'STRONGHOLD AVG: {avg_time(stronghold_times)}\n'
             stat_file.write(stats)
 
         time.sleep(10)
